@@ -1,15 +1,18 @@
-import axios from 'axios';
+import axios from "axios";
 
-const api = axios.create({ baseURL: `${import.meta.env.VITE_API_URL || ''}/api` });
+const base = (import.meta.env.VITE_API_URL || "").trim().replace(/\/+$/, "");
+const api = axios.create({ baseURL: `${base}/api` });
 
-// Attach the JWT to every request
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
 export const errMsg = (err) =>
-  err.response?.data?.message || (err.request ? 'Cannot reach the server. Is the backend running?' : err.message);
+  err.response?.data?.message ||
+  (err.request
+    ? "Cannot reach the server. Is the backend running?"
+    : err.message);
 
 export default api;

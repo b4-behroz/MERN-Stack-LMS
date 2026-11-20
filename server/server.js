@@ -7,17 +7,18 @@ const routes = require("./routes");
 const { notFound, errorHandler } = require("./middleware/error");
 
 const app = express();
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL ? process.env.CLIENT_URL.split(",") : "*",
-  }),
-);
+// CLIENT_URL may hold several origins separated by commas; trailing slashes are ignored
+const origins = (process.env.CLIENT_URL || "")
+  .split(",")
+  .map((o) => o.trim().replace(/\/+$/, ""))
+  .filter(Boolean);
+app.use(cors({ origin: origins.length ? origins : "*" }));
 app.use(express.json());
 
 // Friendly root + health route (work without a database)
 app.get("/", (req, res) =>
   res.json({
-    name: "MERN Stack LMS API",
+    name: "LearnHub API",
     status: "running",
     docs: "See /api/health and /api/courses",
   }),
