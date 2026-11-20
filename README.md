@@ -25,14 +25,14 @@ Prerequisites: Node.js 18+ and MongoDB running locally (or a MongoDB Atlas URI).
 # 1. Backend
 cd server
 npm install
-cp .env.example .env      # set MONGO_URI and a long random JWT_SECRET
+cp .env      # set MONGO_URI and a long random JWT_SECRET
 npm run seed              # optional: demo users + courses
 npm run dev               # http://localhost:5000
 
-# 2. Frontend (new terminal)
+# 2. Frontend
 cd client
 npm install
-npm run dev               # http://localhost:5173  (proxies /api to :5000)
+npm run dev               # http://localhost:5173
 ```
 
 ### Demo accounts (after `npm run seed`)
@@ -70,8 +70,8 @@ Send the token as `Authorization: Bearer <token>`.
 
 ```bash
 npm run install:all
-npm run build             # builds client/dist
-NODE_ENV=production npm start   # Express serves the API and the built React app on one port
+npm run build
+NODE_ENV=production npm start
 ```
 
 Set `MONGO_URI`, `JWT_SECRET`, `NODE_ENV=production` on your host (Render, Railway, etc.).

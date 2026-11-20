@@ -1,5 +1,3 @@
-// Automated API test. Run with the server started:  npm run test:api
-// Prints each request/response and a PASS/FAIL table; saves api-test-report.md for your PDF report.
 const fs = require("fs");
 const BASE = process.env.API_URL || "http://localhost:5000/api";
 const results = [];

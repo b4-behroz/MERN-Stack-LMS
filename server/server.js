@@ -7,7 +7,6 @@ const routes = require("./routes");
 const { notFound, errorHandler } = require("./middleware/error");
 
 const app = express();
-// CLIENT_URL may hold several origins separated by commas; trailing slashes are ignored
 const origins = (process.env.CLIENT_URL || "")
   .split(",")
   .map((o) => o.trim().replace(/\/+$/, ""))
@@ -15,7 +14,6 @@ const origins = (process.env.CLIENT_URL || "")
 app.use(cors({ origin: origins.length ? origins : "*" }));
 app.use(express.json());
 
-// Friendly root + health route (work without a database)
 app.get("/", (req, res) =>
   res.json({
     name: "LearnHub API",
@@ -25,7 +23,6 @@ app.get("/", (req, res) =>
 );
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
-// Make sure MongoDB is connected before any other /api route runs
 app.use("/api", async (req, res, next) => {
   if (!process.env.JWT_SECRET)
     return res
@@ -36,17 +33,14 @@ app.use("/api", async (req, res, next) => {
     next();
   } catch (err) {
     console.error("DB error:", err.message);
-    res
-      .status(500)
-      .json({
-        message:
-          "Database connection failed. Check MONGO_URI and Atlas network access.",
-      });
+    res.status(500).json({
+      message:
+        "Database connection failed. Check MONGO_URI and Atlas network access.",
+    });
   }
 });
 app.use("/api", routes);
 
-// Serve the built React app when running as one combined server
 const dist = path.join(__dirname, "../client/dist");
 if (process.env.NODE_ENV === "production" && !process.env.VERCEL) {
   app.use(express.static(dist));
@@ -58,7 +52,6 @@ if (process.env.NODE_ENV === "production" && !process.env.VERCEL) {
 app.use("/api", notFound);
 app.use(errorHandler);
 
-// Local / normal host: start listening. On Vercel the exported app is used instead.
 if (require.main === module) {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

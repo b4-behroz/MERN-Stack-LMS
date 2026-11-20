@@ -1,4 +1,3 @@
-// Run: npm run seed  -> creates an admin, an instructor, a student and sample courses
 require("dotenv").config();
 const mongoose = require("mongoose");
 const User = require("./models/User");

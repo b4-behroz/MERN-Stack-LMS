@@ -1,15 +1,15 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-// Cached connection: works for a normal server and for serverless (Vercel), where
-// the function may be re-used between requests.
 let cached = global._mongoConn;
 if (!cached) cached = global._mongoConn = { conn: null, promise: null };
 
 module.exports = async function connectDB() {
   if (cached.conn) return cached.conn;
-  if (!process.env.MONGO_URI) throw new Error('MONGO_URI is not set');
+  if (!process.env.MONGO_URI) throw new Error("MONGO_URI is not set");
   if (!cached.promise) {
-    cached.promise = mongoose.connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 8000 });
+    cached.promise = mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 8000,
+    });
   }
   try {
     cached.conn = await cached.promise;
